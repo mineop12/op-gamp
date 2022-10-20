@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5.Gesture control car</title>
+    <style>
+        #cod {
+            color: rgb(255, 0, 0);
+            background-color: rgb(44, 204, 164);
+            border-radius: 20px;
+            border-color: black;
+            border-style: dashed;
+            width: 600px;
+        }
+
+        #cop {
+            color: blue;
+            background-color: chartreuse;
+            border-radius: 20px;
+            border-style: solid;
+            border-color: black;
+            width: 700pxpx;
+
+        }
+        #cash{
+            color: rgb(15, 18, 223);
+            background-color: cornsilk;
+            border-style: dashed;
+            border-radius: 20px;
+            width: 1000px;
+            font-family: cursive;
+            padding: 100px;
+            margin: 300px;
+        }
+        #gta{
+            color: rgb(255, 0, 0);
+            background-color: rgb(44, 204, 164);
+            border-radius: 20px;
+            border-color: black;
+            border-style: dashed;
+            width: 600px; 
+        }
+    </style>
+</head>
+
+<body>
+    <p>
+    <h1 id="cod">
+        Now the new code for <br>
+        3.Gesture control car <br>
+        but Gesture control car has 2 code for <br><br>
+    </h1>
+    </p>
+    <div>
+        <h2 id="cop">
+            1.Transmiter <br> <br>
+            2.reciver <br><br>
+            First I am showing the code for Transmiter
+        </h2>
+    </div>
+    <div>
+        <h2 id="cash">
+            //Arduino Gesture Control Robot<br>
+            //Reciver Circuit <br>
+            //Created BY DIY Builder<br>
+            //You need to install the required libraries before uploading the code.<br>
+            //To install the libraries first download the library's zip file then go to sketch > include
+            Library
+            > ADD
+            .ZIP File > Select the downloaded<br>
+            // libary's Zip file and you're done now. You can upload the the sketch now.<br>
+            // For more details you can contact me here www.instagram.com/diy.builder<br>
+
+
+            #include<SPI.h><br>
+                #include<nRF24L01.h><br>
+                    #include<RF24.h><br>
+
+                        const int x_out = A0;<br>
+                        const int y_out = A1;<br>
+                        RF24 radio(8,10);<br>
+                        const byte address[6] = "00001";<br>
+                        struct data{<br>
+                        int xAxis;<br>
+                        int yAxis;<br>
+
+                        };<br>
+                        data send_data;<br>
+
+
+
+                        void setup() {<br>
+                        // put your setup code here, to run once:<br>
+                        radio.begin();<br>
+                        radio.openWritingPipe(address);<br>
+                        radio.setPALevel(RF24_PA_MIN);<br>
+                        radio.setDataRate(RF24_250KBPS);<br>
+                        radio.stopListening();<br>
+                        }<br>
+
+                        void loop() {<br>
+                        // put your main code here, to run repeatedly:<br>
+                        send_data.xAxis = analogRead(x_out);<br>
+                        send_data.yAxis = analogRead(y_out);<br>
+                        radio.write(&send_data, sizeof(data));<br>
+                        }<br>
+        </h2>
+    </div>
+    <div>
+        <h2 id="gta">
+            Now I am showing the code for reciver
+        </h2>
+    </div>
+    <div>
+        <h2 id="cash">
+            //Arduino Gesture Control Robot<br>
+            //Reciver Circuit <br>
+            //Created BY DIY Builder<br>
+            //You need to install the required libraries before uploading the code.<br>
+            //To install the libraries first download the library from here <br>
+            https://github.com/nRF24/RF24
+            then
+            go to
+            sketch ><br> include Library > ADD .ZIP File > Select the downloaded<br>
+            // libary's Zip file and you're done now. You can upload the the sketch now.<br>
+            // For more details you can contact me here www.instagram.com/diy.builder<br>
+
+
+            #include<SPI.h><br>
+                #include<nRF24L01.h><br>
+                    #include<RF24.h><br>
+
+                        int ENA = 3;<br>
+                        int ENB = 9;<br>
+                        int MotorA1 = 4;<br>
+                        int MotorA2 = 5;<br>
+                        int MotorB1 = 6;<br>
+                        int MotorB2 = 7;<br>
+
+                        RF24 radio(8, 10);<br>
+
+                        const byte address[6] = "00001";<br>
+
+                        struct data {<br>
+                        int xAxis;<br>
+                        int yAxis;<br>
+
+                        };<br>
+                        data receive_data;<br>
+
+
+
+                        void setup() {<br>
+                        // put your setup code here, to run once:<br>
+                        Serial.begin(9600);<br>
+                        radio.begin();<br>
+                        radio.openReadingPipe(0,address);<br>
+                        radio.setPALevel(RF24_PA_MIN);<br>
+                        radio.setDataRate(RF24_250KBPS);<br>
+                        radio.startListening();<br>
+                        pinMode(ENA, OUTPUT);<br>
+                        pinMode(ENB, OUTPUT);<br>
+                        pinMode(MotorA1, OUTPUT);<br>
+                        pinMode(MotorA2, OUTPUT);<br>
+                        pinMode(MotorB1, OUTPUT);<br>
+                        pinMode(MotorB2, OUTPUT);<br>
+                        }<br>
+
+
+                        void loop() {<br>
+                        // put your main code here, to run repeatedly<br>
+                        while(radio.available()) {<br>
+                        radio.read(&receive_data, sizeof(data));<br>
+                        if(receive_data.yAxis > 400) {<br>
+                        digitalWrite(MotorA1, LOW);<br>
+                        digitalWrite(MotorA2, HIGH);<br>
+                        digitalWrite(MotorB1, HIGH);<br>
+                        digitalWrite(MotorB2, LOW);<br>
+                        analogWrite(ENA, 150);<br>
+                        analogWrite(ENB, 150);<br>
+                        <br>
+                        }else if(receive_data.yAxis < 320) {<br>
+                            digitalWrite(MotorA1, HIGH);<br>
+                            digitalWrite(MotorA2, LOW);<br>
+                            digitalWrite(MotorB1, LOW);<br>
+                            digitalWrite(MotorB2, HIGH);<br>
+                            analogWrite(ENA, 150);<br>
+                            analogWrite(ENB, 150);<br>
+                            } else if(receive_data.xAxis < 320){<br>
+                                digitalWrite(MotorA1, HIGH);<br>
+                                digitalWrite(MotorA2, LOW);<br>
+                                digitalWrite(MotorB1, HIGH);<br>
+                                digitalWrite(MotorB2, LOW);<br>
+                                analogWrite(ENA, 150);<br>
+                                analogWrite(ENB, 150);<br>
+                                }else if(receive_data.xAxis > 400){<br>
+                                digitalWrite(MotorA1, LOW);<br>
+                                digitalWrite(MotorA2, HIGH);<br>
+                                digitalWrite(MotorB1, LOW);<br>
+                                digitalWrite(MotorB2, HIGH);<br>
+                                analogWrite(ENA, 150);<br>
+                                analogWrite(ENB, 150);<br>
+                                }else {<br>
+                                digitalWrite(MotorA1, LOW);<br>
+                                digitalWrite(MotorA2, LOW);<br>
+                                digitalWrite(MotorB1, LOW);<br>
+                                digitalWrite(MotorB2, LOW);<br>
+                                analogWrite(ENA, 0);<br>
+                                analogWrite(ENB, 0);<br>
+                                }<br>
+                                }<br>
+                                }<br>
+        </h2>
+    </div>
+</body>
+
+</html>
